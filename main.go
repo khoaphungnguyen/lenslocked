@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -10,7 +12,18 @@ import (
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<h1>Welcome to my awesome site!</h1>")
+	tpl, err := template.ParseFiles("template/home.gohtml")
+	if err != nil {
+		log.Printf("error parsing: %v", err)
+		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
+		return
+	}
+	err = tpl.Execute(w, nil)
+	if err != nil {
+		log.Printf("executing error: %v", err)
+		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
+		return
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +51,27 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 
 }
 
+type User struct {
+	Name string
+	Bio  string
+}
+
 func main() {
+	// t, err := template.ParseFiles("hello.gohtml")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// user := User{
+	// 	Name: "John Smith",
+	// 	Bio:  `<script>alert("Haha, you have been hacked!")</script>`,
+	// }
+
+	// err = t.Execute(os.Stdout, user)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/articles/{date}", getArticle)
