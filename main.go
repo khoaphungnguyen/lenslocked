@@ -10,9 +10,9 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func templateHandler(w http.ResponseWriter, filepath string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tpl, err := template.ParseFiles("template/home.gohtml")
+	tpl, err := template.ParseFiles(filepath)
 	if err != nil {
 		log.Printf("error parsing: %v", err)
 		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
@@ -26,9 +26,14 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	templateHandler(w, "template/home.gohtml")
+
+}
+
 func contactHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<h1>Contact Page</h1><p>To get in touch, email me at <a href=\"mailto:rex@test.com\">rex@test.com</a>.</p>")
+	templateHandler(w, "template/contact.gohtml")
+
 }
 
 func fagHandler(w http.ResponseWriter, r *http.Request) {
@@ -57,21 +62,6 @@ type User struct {
 }
 
 func main() {
-	// t, err := template.ParseFiles("hello.gohtml")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// user := User{
-	// 	Name: "John Smith",
-	// 	Bio:  `<script>alert("Haha, you have been hacked!")</script>`,
-	// }
-
-	// err = t.Execute(os.Stdout, user)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/articles/{date}", getArticle)
