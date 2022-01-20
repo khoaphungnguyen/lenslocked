@@ -37,18 +37,7 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func fagHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, `<h1>FAG page</h1>
-	<p>
-	<strong>Q: Is there a free version?</strong><br>
-	Yes: We offer a free trial for 30 days on any paid plans. <br>
-	<br>
-	<strong>Q: What are your support hours?</strong><br>
-	We have support staff answering email 24/7, though response time may be a bit slower on weekends. <br>
-	<br>
-	<strong>Q: How do I contact support?</strong><br>
-	Email us -  <a href=\"mailto:rex@test.com\">rex@test.com</a>.</p> <br>
-	</p>`)
+	templateHandler(w, "template/fag.gohtml")
 }
 
 func getArticle(w http.ResponseWriter, r *http.Request) {
