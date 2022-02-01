@@ -2,42 +2,35 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/khoaphungnguyen/lenslocked/views"
 )
 
-func templateHandler(w http.ResponseWriter, filepath string) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tpl, err := template.ParseFiles(filepath)
+func executeTemplate(w http.ResponseWriter, filename string) {
+	t, err := views.Parse(filename)
 	if err != nil {
-		log.Printf("error parsing: %v", err)
-		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
-		return
+		log.Printf("Error parsing template: %v", err)
+		http.Error(w, "There was an error parsing the template.", http.StatusInternalServerError)
 	}
-	err = tpl.Execute(w, nil)
-	if err != nil {
-		log.Printf("executing error: %v", err)
-		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
-		return
-	}
+	t.Execute(w, nil)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	templateHandler(w, "template/home.gohtml")
+	executeTemplate(w, "template/home.gohtml")
 
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
-	templateHandler(w, "template/contact.gohtml")
+	executeTemplate(w, "template/contact.gohtml")
 
 }
 
 func fagHandler(w http.ResponseWriter, r *http.Request) {
-	templateHandler(w, "template/fag.gohtml")
+	executeTemplate(w, "template/fag.gohtml")
 }
 
 func getArticle(w http.ResponseWriter, r *http.Request) {
