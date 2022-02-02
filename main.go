@@ -19,23 +19,14 @@ type User struct {
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	home, err := views.Parse(filepath.Join("templates", "home.gohtml"))
-	if err != nil {
-		panic(err)
-	}
+	home := views.Must(views.Parse(filepath.Join("templates", "home.gohtml")))
 	r.Get("/", controllers.StaticHandler(home))
 
-	contact, err := views.Parse(filepath.Join("templates", "contact.gohtml"))
-	if err != nil {
-		panic(err)
-	}
+	contact := views.Must(views.Parse(filepath.Join("templates", "contact.gohtml")))
 	r.Get("/contact", controllers.StaticHandler(contact))
 
-	tpl, err := views.Parse(filepath.Join("templates", "fag.gohtml"))
-	if err != nil {
-		panic(err)
-	}
-	r.Get("/fag", controllers.StaticHandler(tpl))
+	fag := views.Must(views.Parse(filepath.Join("templates", "fag.gohtml")))
+	r.Get("/fag", controllers.StaticHandler(fag))
 
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
