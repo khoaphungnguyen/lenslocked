@@ -19,7 +19,7 @@ type User struct {
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	home := views.Must(views.ParseFS(templates.FS, "home.gohtml"))
+	home := views.Must(views.ParseFS(templates.FS, "layout-page.gohtml", "home.gohtml"))
 	r.Get("/", controllers.StaticHandler(home))
 
 	contact := views.Must(views.ParseFS(templates.FS, "contact.gohtml"))
