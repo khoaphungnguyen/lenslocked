@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"path/filepath"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/khoaphungnguyen/lenslocked/controllers"
+	"github.com/khoaphungnguyen/lenslocked/templates"
 	"github.com/khoaphungnguyen/lenslocked/views"
 )
 
@@ -19,13 +19,13 @@ type User struct {
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	home := views.Must(views.Parse(filepath.Join("templates", "home.gohtml")))
+	home := views.Must(views.ParseFS(templates.FS, "home.gohtml"))
 	r.Get("/", controllers.StaticHandler(home))
 
-	contact := views.Must(views.Parse(filepath.Join("templates", "contact.gohtml")))
+	contact := views.Must(views.ParseFS(templates.FS, "contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(contact))
 
-	fag := views.Must(views.Parse(filepath.Join("templates", "fag.gohtml")))
+	fag := views.Must(views.ParseFS(templates.FS, "fag.gohtml"))
 	r.Get("/fag", controllers.StaticHandler(fag))
 
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
