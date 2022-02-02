@@ -1,3 +1,4 @@
+{{template "header" .}}
 <h1>FAG page</h1>
 
 {{range .}}
@@ -7,3 +8,4 @@
 {{define "qa"}}
 <li><b>{{.Question}}</b>{{.Answer}}</li>
 {{end}}
+{{template "footer" .}}
