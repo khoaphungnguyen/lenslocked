@@ -13,7 +13,11 @@ type Users struct {
 
 func (user Users) New(w http.ResponseWriter, r *http.Request) {
 	// We need a view to render the users
-	user.Template.New.Execute(w, nil)
+	var data struct {
+		Email string
+	}
+	data.Email = r.FormValue("email")
+	user.Template.New.Execute(w, data)
 }
 
 func (user Users) Create(w http.ResponseWriter, r *http.Request) {
